@@ -1,0 +1,163 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Leifur v2 (beta)</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    {{> fbconnect}}
+    {{> menu_bar}}
+    
+    {{#if loggingIn}}
+        <div class="container">
+            <i id="fullscreen-loader" class="icon-spinner icon-spin"></i>
+        </div>
+    {{else}}
+        {{#if currentUser}}
+            <div class="container">
+                {{> page_controller}}
+            </div>
+        {{else}}
+            {{> login}}
+        {{/if}}
+    {{/if}}
+</body>
+
+
+<!-- CONTROLLER, ERROR PAGES AND FACEBOOK SDK -->
+
+<template name="page_controller">
+    {{{display_page}}}
+</template>
+
+<template name="page_not_found">
+    <h1>Síða finnst ekki.</h1>
+</template>
+
+<template name="fbconnect">
+    <div id="fb-root"></div>
+    {{connect}}
+</template>
+
+
+<!-- TOP MENU BAR -->
+
+<template name="menu_bar">
+    <div id="main-nav" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/" data-href="/"><i class="icon-beer"></i> Leifur</a>
+                {{#if currentUser}}
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="/" data-href="/">Heim</a></li>
+                            <li><a href="/forum" data-href="/forum">Umræðutorg</a></li>
+                            <li><a href="/quotes" data-href="/quotes">Kvótakerfið</a></li>
+                            <li><a href="/members" data-href="/members">Félagatal</a></li>
+                        </ul>
+                    </div>
+                    <ul class="nav pull-right">
+                        <li>
+                            <form class="navbar-search">
+                                <input type="text" class="search-query" placeholder="Leita">
+                            </form>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{currentUser.profile.name}} <i class="icon-caret-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Stillingar</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/logout" data-href="/logout">Útskrá</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<!-- LOGIN -->
+
+<template name="login">
+    <div class="full-wrapper leifur-bg">
+        <div class="black-box">
+            <h3>Ertu í Leif?</h3>
+            <p>Ef þú ert meðlimur í Lífsnautnafélaginu Leifur, vinsamlegast smelltu þá á innskráningar takkan hér fyrir neðan. Ef þú ert ekki meðlimur, vinsamlegast <a href="http://www.endoftheinternet.com/" target="_blank">smelltu þá hér</a>.</p>
+            <p><a id="login"><img src="/img/facebook-login.png" title="Innskrá með Facebook" /></a></p>
+        </div>
+    </div>
+</template>
+
+
+<!-- SIDEBARS -->
+
+<template name="default_sidebar">
+    <div class="span4">
+        <ul class="leifur-sidebar-wrapper">
+            <h4>Handahófskvót</h4>
+            {{#with random_quote}}
+                <li>„{{text}}“</li>
+                <div class="author">
+                    <img src="//graph.facebook.com/{{fb_id}}/picture" />
+                </div>
+            {{/with}}
+        </ul>
+    </div>
+</template>
+
+
+<!-- INDEX -->
+
+<template name="index">
+    
+    <div id="front-page" class="row">
+        <div class="span8">
+            <div id="post-wrapper" class="clearfix">
+                <ul id="post-type">
+                    <li class="post selected" data-type="post"><i class="icon-bullhorn"></i> Færsla</li>
+                    <li class="book" data-type="book"><i class="icon-book"></i> Skrá í sögubækurnar</li>
+                </ul>
+                <div id="post-inner" class="clearfix" rel="post">
+                    <a class="btn btn-primary pull-right span1">Senda</a>
+                    <ul id="post-content" class="span6">
+                        <li id="post-post" class="selected">
+                            <textarea class="span7" placeholder="Hvernig líður þér í dag?"></textarea>
+                        </li>
+                        <li id="post-link">
+                            <textarea class="span7" placeholder="Hverju viltu henda í Subbuna?"></textarea>
+                            <div class="row">
+                                <div class="input-prepend span3">
+                                    <span class="add-on"><i class="icon-link"></i></span>
+                                    <input name="link" type="text" placeholder="http://www.youtube.com/" class="span3">
+                                </div>
+                                <div class="input-prepend span2">
+                                    <span class="add-on"><i class="icon-bookmark"></i></span>
+                                    <input name="link" type="text" placeholder="Myndband" class="span2">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        {{> default_sidebar}}
+
+    </div>
+
+</template>

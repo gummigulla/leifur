@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/maggitrymbill/Projects/leifur"
+		}
+	],
+	"file_exclude_patterns": ["*.css"],
+	"folder_exclude_patterns": [".meteor", ".sass-cache"]
+}
